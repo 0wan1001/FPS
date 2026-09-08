@@ -17,10 +17,14 @@ public class PlayerWeapon : MonoBehaviour
     
     private int _currentMagazineCount;
     private float _currentCooldown;
+
+    private float _cooldownReduction;
+    public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
     private bool _hasBullet => _currentMagazineCount > 0;
-    private bool _isReadyFire => _currentCooldown >= _cooldown;
+    private float _buffCooldown => Mathf.Max(0.01f, _cooldown - _cooldownReduction);
+    private bool _isReadyFire => _currentCooldown >= _buffCooldown;
     private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet;
     
     // 한 탄알집에 30발 들어갈 수 있음

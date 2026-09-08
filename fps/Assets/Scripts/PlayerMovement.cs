@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
-
+    
     [SerializeField] private Transform _cameraPivot;
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _minPitch;
@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     private float _pitch;
     private Rigidbody _rigidbody;
 
+    private float _speedBonus = 0f;
+    public void SetSpeedBonus(float bonus) => _speedBonus = bonus;
     private void Awake() => CacheComponents();
 
     public void Rotate()
@@ -45,10 +47,12 @@ public class PlayerMovement : MonoBehaviour
             transform.right * input.x +
             transform.forward * input.z;
         
+        float currentSpeed = _moveSpeed +  _speedBonus;
+        
         Vector3 newVelocity = new Vector3(
-            direction.x * _moveSpeed,
+            direction.x * currentSpeed,
             _rigidbody.velocity.y,
-            direction.z * _moveSpeed
+            direction.z * currentSpeed
         );
         
         // _rigidbody.velocity에 적용

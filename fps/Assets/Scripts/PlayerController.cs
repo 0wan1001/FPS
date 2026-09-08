@@ -7,6 +7,15 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField] private Transform _cameraPivot;
     [SerializeField] private float _detectionRange;
     [SerializeField] private KeyCode _interactKey = KeyCode.E;
+    
+    [Header("스팀팩 설정")]
+    [SerializeField] private float _stimpackDuration;
+    [SerializeField] private float _stimpackSpeedBonus;
+    [SerializeField] private float _stimpackCooldownBonus;
+    [SerializeField] private GameObject _stimpackScreen;
+
+    private float _stimpackTimer;
+    private bool _isStimpackActive;
 
     private PlayerWeapon _weapon;
     private PlayerMovement _movement;
@@ -110,7 +119,32 @@ public class PlayerController : MonoBehaviour, IInteractor
         _targetInteractable = null;
     }
 
+    public void UseStimpack()
+    {
+        _stimpackTimer = _stimpackDuration;
+        _isStimpackActive = true;
+        
+        _movement.SetSpeedBonus(_stimpackSpeedBonus);
+        _weapon.SetCooldownReduction(_stimpackCooldownBonus);
+        if (_stimpackScreen != null) _stimpackScreen.SetActive(true);
+        
+        Debug.Log("스팀팩 발동 20초 지속");
+    }
+
     public void UsedStimpack()
     {
+        if (!_isStimpackActive) return;
+        
+        _stimpackTimer -= Time.deltaTime;
+
+        if (_stimpackTimer <= 0f)
+        {
+            _isStimpackActive = false;
+            _movement.SetSpeedBonus(0f);
+            _weapon.SetCooldownReduction(0f);
+            if (_stimpackScreen != null) _stimpackScreen.SetActive(false);
+            
+            Debug.Log("스팀팩 종료");
+        }
     }
 }
