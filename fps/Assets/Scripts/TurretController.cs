@@ -129,7 +129,6 @@ public class TurretController : MonoBehaviour, IDamageable
             if (hit.transform.CompareTag("Player"))
             {
                 _isPlayerInSight = true;
-                Debug.Log("플레이어 감지");
             }
         }
     }

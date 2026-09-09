@@ -5,19 +5,29 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private int _jumpPower;
     
     [SerializeField] private Transform _cameraPivot;
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _minPitch;
     [SerializeField] private float _maxPitch;
+    [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
+    
+    public LayerMask TargetLayer;
 
+     private bool _isGrounded;
+    private bool _isPressedJump => Input.GetKeyDown(_jumpKey);
+    private bool _canJump => _isGrounded && _isPressedJump;
+    
     private float _pitch;
     private Rigidbody _rigidbody;
 
     private float _speedBonus = 0f;
+    private int _jumpBonus = 0;
+    public void SetJumpBonus(int bonus) => _jumpBonus = bonus;
     public void SetSpeedBonus(float bonus) => _speedBonus = bonus;
     private void Awake() => CacheComponents();
-
+    
     public void Rotate()
     {
         Vector3 input = ReadRotateInput() * _mouseSensitivity;
@@ -58,16 +68,33 @@ public class PlayerMovement : MonoBehaviour
         // _rigidbody.velocity에 적용
         _rigidbody.velocity = newVelocity;
     }
+    
 
     public void Jump()
     {
-        if (!Input.GetKeyDown(KeyCode.Space))
-        {
-            return;
-        }
-        _rigidbody.AddForce(new Vector3(0, 7, 0), ForceMode.Impulse);
+        int currentJump = _jumpPower + _jumpBonus;
+        if (!_canJump) return;
+        
+        _rigidbody.AddForce(new Vector3(0, currentJump, 0), ForceMode.Impulse);
+        _isGrounded = false;
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (TargetLayer.Contains(other))
+        {
+            _isGrounded = true;
+            Debug.Log("땅 O");
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (TargetLayer.Contains(other))
+        {
+            _isGrounded = false;
+            Debug.Log("땅 X");
+        }
+    }
 
     private Vector3 ReadMoveInput()
     {

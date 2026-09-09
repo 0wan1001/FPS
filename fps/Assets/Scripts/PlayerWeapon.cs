@@ -8,24 +8,33 @@ public class PlayerWeapon : MonoBehaviour
 
     [SerializeField] private KeyCode _reloadKey = KeyCode.R;
     [SerializeField] private KeyCode _fireKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode _grenadeKey = KeyCode.Alpha3;
     [SerializeField] private float _range;
     [SerializeField] private int _damage;
     [SerializeField] private float _cooldown;
     [SerializeField] private int _maxMagazineCount;
+    [SerializeField] private float _maxGrenadeThrowForce;
+    [SerializeField] private GrenadeController _grenadePrefab;
     [SerializeField] private FlameEffect _flameEffect;
     [SerializeField] private FlameEffect _bulletImpactEffectPrefab;
-    
-    private int _currentMagazineCount;
-    private float _currentCooldown;
+    [SerializeField] private Transform _generadePoint;
 
+    [SerializeField] private float _currentGrenadeThrowForce;
+    
+    private float _currentCooldown;
+    private int _currentMagazineCount;
     private float _cooldownReduction;
     public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
+    private bool _isPressedGrenadeKey => Input.GetKey(_grenadeKey);
+    private bool _isUpGrenadeKey => Input.GetKeyUp(_grenadeKey);
+    private bool _hasEnoughForce => _currentMagazineCount >= _maxMagazineCount * 0.3;
     private bool _hasBullet => _currentMagazineCount > 0;
     private float _buffCooldown => Mathf.Max(0.01f, _cooldown - _cooldownReduction);
     private bool _isReadyFire => _currentCooldown >= _buffCooldown;
     private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet;
+    private bool _canThrowGrenade => _isUpGrenadeKey && _hasEnoughForce;
     
     // 한 탄알집에 30발 들어갈 수 있음
     // 30발 발사시 총 안쏴짐
@@ -98,6 +107,30 @@ public class PlayerWeapon : MonoBehaviour
         if (_isReadyFire) return;
         
         _currentCooldown += Time.deltaTime;
+    }
+    public void GrenadeThrowCharge()
+    {
+        if (!_isPressedGrenadeKey) return;
+        
+        _currentGrenadeThrowForce += Time.deltaTime * _maxGrenadeThrowForce;
+        _currentGrenadeThrowForce = Mathf.Clamp(_currentGrenadeThrowForce, 0f, _maxGrenadeThrowForce);
+    }
+
+    public void GrenadeThrowRelease()
+    {
+        if (!_isUpGrenadeKey) return;
+        
+        if (!_hasEnoughForce)
+        {
+            _currentGrenadeThrowForce = 0f;
+            return;
+        }
+        
+        Vector3 force = transform.forward * _currentGrenadeThrowForce;
+        
+        Instantiate(_grenadePrefab, _generadePoint.position, _generadePoint.rotation)
+            .Throw(force);
+        _currentGrenadeThrowForce = 0f;
     }
     public void Reload()
     {

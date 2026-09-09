@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField] private float _stimpackDuration;
     [SerializeField] private float _stimpackSpeedBonus;
     [SerializeField] private float _stimpackCooldownBonus;
+    [SerializeField] private int _stimpackJumpBonus;
     [SerializeField] private GameObject _stimpackScreen;
 
     private float _stimpackTimer;
@@ -39,6 +40,9 @@ public class PlayerController : MonoBehaviour, IInteractor
         _movement.Jump();
         _weapon.Fire();
         _weapon.Reload();
+        _weapon.GrenadeThrowCharge();
+        _weapon.GrenadeThrowRelease();
+        
         DetectInteractable();
         TryInteract();
         UsedStimpack();
@@ -127,6 +131,7 @@ public class PlayerController : MonoBehaviour, IInteractor
         
         _movement.SetSpeedBonus(_stimpackSpeedBonus);
         _weapon.SetCooldownReduction(_stimpackCooldownBonus);
+        _movement.SetJumpBonus(_stimpackJumpBonus);
         if (_stimpackScreen != null) _stimpackScreen.SetActive(true);
         
         Debug.Log("스팀팩 발동 20초 지속");
@@ -143,6 +148,7 @@ public class PlayerController : MonoBehaviour, IInteractor
             _isStimpackActive = false;
             _movement.SetSpeedBonus(0f);
             _weapon.SetCooldownReduction(0f);
+            _movement.SetJumpBonus(0);
             if (_stimpackScreen != null) _stimpackScreen.SetActive(false);
             
             Debug.Log("스팀팩 종료");
