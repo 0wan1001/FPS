@@ -59,6 +59,14 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.velocity = newVelocity;
     }
 
+    public void Jump()
+    {
+        if (!Input.GetKeyDown(KeyCode.Space))
+        {
+            return;
+        }
+        _rigidbody.AddForce(new Vector3(0, 7, 0), ForceMode.Impulse);
+    }
     
 
     private Vector3 ReadMoveInput()

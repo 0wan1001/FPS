@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     private void Update()
     {
         _movement.Rotate();
+        _movement.Jump();
         _weapon.Fire();
         _weapon.Reload();
         DetectInteractable();
