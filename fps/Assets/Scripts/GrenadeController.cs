@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class GrenadeController : MonoBehaviour
 {
@@ -10,19 +11,19 @@ public class GrenadeController : MonoBehaviour
     [SerializeField] private float _knockbackForce;
     [SerializeField] private GameObject _effect;
     [SerializeField] private GameObject _body;
-
+    
     private float _elapsedTime;
     private Rigidbody _rigidbody;
     private bool _isExplode;
 
     private void Awake() => CacheComponents();
-
+    
     private void Update()
     {
         UpdateElapseTime();
         Explode();
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -54,6 +55,7 @@ public class GrenadeController : MonoBehaviour
                 damageable.Knockback(GetKnockbackDirection(col.transform));
             }
         }
+        
         Destroy(gameObject, 1f);
     }
 

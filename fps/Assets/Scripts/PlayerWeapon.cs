@@ -27,7 +27,7 @@ public class PlayerWeapon : MonoBehaviour
     public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
-    private bool _isPressedGrenadeKey => Input.GetKey(_grenadeKey);
+    private bool _isPressGrenadeKey => Input.GetKey(_grenadeKey);
     private bool _isUpGrenadeKey => Input.GetKeyUp(_grenadeKey);
     private bool _hasEnoughForce => _currentMagazineCount >= _maxMagazineCount * 0.3;
     private bool _hasBullet => _currentMagazineCount > 0;
@@ -110,7 +110,7 @@ public class PlayerWeapon : MonoBehaviour
     }
     public void GrenadeThrowCharge()
     {
-        if (!_isPressedGrenadeKey) return;
+        if (!_isPressGrenadeKey) return;
         
         _currentGrenadeThrowForce += Time.deltaTime * _maxGrenadeThrowForce;
         _currentGrenadeThrowForce = Mathf.Clamp(_currentGrenadeThrowForce, 0f, _maxGrenadeThrowForce);
@@ -132,6 +132,7 @@ public class PlayerWeapon : MonoBehaviour
             .Throw(force);
         _currentGrenadeThrowForce = 0f;
     }
+    
     public void Reload()
     {
         if (!_isPressedReload) return;
