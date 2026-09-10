@@ -5,6 +5,7 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class GrenadeController : MonoBehaviour
 {
+    [Header("수류탄 설정")]
     [SerializeField] private float _explosionDelay;
     [SerializeField] private float _range;
     [SerializeField] private int _damage;
@@ -62,7 +63,7 @@ public class GrenadeController : MonoBehaviour
     private Vector3 GetKnockbackDirection(Transform target)
     {
         Vector3 dir = (target.position - transform.position) * _knockbackForce;
-        dir.y = Random.Range(0f, 5f);
+        dir.y = Random.Range(3f, 5f);
         return dir;
     }
 

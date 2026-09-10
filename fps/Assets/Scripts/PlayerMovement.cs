@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("플레이어 설정")]
+    [SerializeField] private Transform _cameraPivot;
+    [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private int _jumpPower;
-    
-    [SerializeField] private Transform _cameraPivot;
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _minPitch;
     [SerializeField] private float _maxPitch;
-    [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
     
     public LayerMask TargetLayer;
 
-     private bool _isGrounded;
+    private bool _isGrounded;
     private bool _isPressedJump => Input.GetKeyDown(_jumpKey);
     private bool _canJump => _isGrounded && _isPressedJump;
     

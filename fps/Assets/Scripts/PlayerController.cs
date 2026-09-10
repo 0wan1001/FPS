@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IInteractor
 {
+    [Header("플레이어 설정")]
     [SerializeField] private Transform _cameraPivot;
-    [SerializeField] private float _detectionRange;
     [SerializeField] private KeyCode _interactKey = KeyCode.E;
+    [SerializeField] private float _detectionRange;
+    
     
     [Header("스팀팩 설정")]
     [SerializeField] private float _stimpackDuration;
@@ -17,6 +19,9 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private float _stimpackTimer;
     private bool _isStimpackActive;
+    
+    public bool IsStimpackActive => _isStimpackActive;
+    public float StimpackTimer => _stimpackTimer;
 
     private PlayerWeapon _weapon;
     private PlayerMovement _movement;
@@ -31,7 +36,6 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     // -----------------------------------------------
     private void Awake() => CacheComponents();
-    private void Start() => LockCursor();
     private void FixedUpdate() => _movement.Move();
 
     private void Update()
@@ -43,6 +47,7 @@ public class PlayerController : MonoBehaviour, IInteractor
         _weapon.GrenadeThrowCharge();
         _weapon.GrenadeThrowRelease();
         
+        LockCursor();
         DetectInteractable();
         TryInteract();
         UsedStimpack();
@@ -64,10 +69,20 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void LockCursor()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else if (Cursor.lockState == CursorLockMode.None)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
     }
-
     private void SetWeaponTransform()
     {
         _weapon.transform.SetPositionAndRotation(

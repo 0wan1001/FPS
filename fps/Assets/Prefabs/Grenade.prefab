@@ -51,7 +51,7 @@ MonoBehaviour:
   _explosionDelay: 2
   _range: 4
   _damage: 10
-  _knockbackForce: 0.3
+  _knockbackForce: 2
   _effect: {fileID: 2235009082837415841}
   _body: {fileID: 8265827723010724028}
 --- !u!54 &8077908845038856722
@@ -80,7 +80,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &7790675156577659969
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6277582298912738927}
-  m_Material: {fileID: 13400000, guid: 2cb850f10cec214489882d128c7e6bae, type: 2}
+  m_Material: {fileID: 13400000, guid: 917f36bb76b7ff240861859950d51294, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

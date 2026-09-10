@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class PlayerUIController : MonoBehaviour
+{
+    [SerializeField] private TextMeshProUGUI _magazine;
+    [SerializeField] private TextMeshProUGUI _stimpackTimer;
+    private PlayerWeapon _weapon;
+    private PlayerController _controller;
+    
+    private void Awake() => CacheComponents();
+
+    private void Update()
+    {
+        RefreshMagazineUI();
+        RefreshStimpackTimerUi();
+    }
+
+    private void CacheComponents()
+    {
+        _weapon = GetComponentInChildren<PlayerWeapon>();
+        _controller = GetComponent<PlayerController>();
+    }
+    
+    public void RefreshMagazineUI()
+    {
+        _magazine.text = $"{_weapon.CurrentMagazine} / {_weapon.MaxMagazine}";
+    }
+
+    public void RefreshStimpackTimerUi()
+    {
+        if (!_controller.IsStimpackActive)
+        {
+            _stimpackTimer.gameObject.SetActive(false);
+        }
+        else
+        {
+            _stimpackTimer.gameObject.SetActive(true);
+            _stimpackTimer.text = $"스팀팩 {(int)_controller.StimpackTimer}초";
+        }
+    }
+}

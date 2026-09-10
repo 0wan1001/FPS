@@ -5,25 +5,29 @@ using UnityEngine;
 public class PlayerWeapon : MonoBehaviour
 {
     private Transform _cameraTransform;
-
+    [Header("무기 설정")]
     [SerializeField] private KeyCode _reloadKey = KeyCode.R;
     [SerializeField] private KeyCode _fireKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode _grenadeKey = KeyCode.Alpha3;
+    [SerializeField] private FlameEffect _flameEffect;
+    [SerializeField] private FlameEffect _bulletImpactEffectPrefab;
     [SerializeField] private float _range;
     [SerializeField] private int _damage;
     [SerializeField] private float _cooldown;
     [SerializeField] private int _maxMagazineCount;
-    [SerializeField] private float _maxGrenadeThrowForce;
+    [Header("수류탄 설정")]
     [SerializeField] private GrenadeController _grenadePrefab;
-    [SerializeField] private FlameEffect _flameEffect;
-    [SerializeField] private FlameEffect _bulletImpactEffectPrefab;
     [SerializeField] private Transform _generadePoint;
-
+    [SerializeField] private float _maxGrenadeThrowForce;
     [SerializeField] private float _currentGrenadeThrowForce;
     
     private float _currentCooldown;
     private int _currentMagazineCount;
     private float _cooldownReduction;
+    
+    public int CurrentMagazine => _currentMagazineCount;
+    public int MaxMagazine => _maxMagazineCount;
+    
     public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
