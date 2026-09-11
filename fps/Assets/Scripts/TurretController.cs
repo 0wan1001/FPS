@@ -14,7 +14,8 @@ public class TurretController : MonoBehaviour, IDamageable
     [SerializeField] private BulletController _bulletPrefab;
     [SerializeField] private int _bulletDamage;
     [SerializeField] private float _bulletSpeed;
-    [SerializeField] private float _bulletDestroyDelay;
+    [SerializeField] private float _returnDelay;
+    [SerializeField] private ObjectPool _bulletPool;
     
     private float _currentCooldown;
     private Transform _playerTransform;
@@ -81,16 +82,20 @@ public class TurretController : MonoBehaviour, IDamageable
         
         _currentCooldown += Time.deltaTime;
     }
-
+    
     private void SpawnBullet()
     {
-        BulletController bullet = Instantiate(
-            _bulletPrefab, 
-            _muzzlePoint.position, 
-            _muzzlePoint.rotation
-            );
+        // 1. 얻어오기
+        IPoolable bullet = _bulletPool.Take();
         
-        bullet.SetData(_bulletDamage, _bulletSpeed, _bulletDestroyDelay);
+        // 2. Transform.position, rotation 설정
+        bullet.tr.position = _muzzlePoint.position;
+        bullet.tr.rotation = _muzzlePoint.rotation;
+        
+        // 3. 활성화
+        bullet.tr.gameObject.SetActive(true);
+        
+        (bullet as BulletController).SetData(_bulletDamage, _bulletSpeed, _returnDelay);
     }
 
     private void Rotate()

@@ -126,7 +126,7 @@ public class PlayerWeapon : MonoBehaviour
         
         if (!_hasEnoughForce)
         {
-            _currentGrenadeThrowForce = 0f;
+            _currentGrenadeThrowForce = 5f;
             return;
         }
         
@@ -134,7 +134,7 @@ public class PlayerWeapon : MonoBehaviour
         
         Instantiate(_grenadePrefab, _generadePoint.position, _generadePoint.rotation)
             .Throw(force);
-        _currentGrenadeThrowForce = 0f;
+        _currentGrenadeThrowForce = 5f;
     }
     
     public void Reload()

@@ -47,10 +47,12 @@ public class PlayerController : MonoBehaviour, IInteractor
         _weapon.GrenadeThrowCharge();
         _weapon.GrenadeThrowRelease();
         
-        LockCursor();
         DetectInteractable();
         TryInteract();
         UsedStimpack();
+        
+        if(Input.GetKeyDown(KeyCode.P)) GameManager.Instance.Pause();
+        else if (Input.GetKeyDown(KeyCode.O)) GameManager.Instance.Run();
     }
 
     private void LateUpdate()
@@ -65,23 +67,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         _movement = GetComponent<PlayerMovement>();
         _weapon = GetComponentInChildren<PlayerWeapon>();
         _cameraTransform = Camera.main.transform;
-    }
-
-    private void LockCursor()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else if (Cursor.lockState == CursorLockMode.None)
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
     }
     private void SetWeaponTransform()
     {

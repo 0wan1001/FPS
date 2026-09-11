@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public class BulletController : MonoBehaviour, IPoolable
 {
     private int _damage;
     private float _speed;
+    private float _returnDelay;
+    private float _elapsedTime;
+
+    public ObjectPool Pool { get; set; }
+    public Transform tr { get => transform; }
+    
 
     // 어딘가에 부딪히면
     private void OnTriggerEnter(Collider other)
@@ -16,11 +22,28 @@ public class BulletController : MonoBehaviour
             Debug.Log("플레이어 맞음");
         }
         
-        Destroy(gameObject);
+        Pool.Return(this);
     }
 
-    private void Update() => MoveForward();
-    
+    private void Update()
+    {
+        UpdateElapsedTime();
+        MoveForward();
+        ReturnToPool();
+    }
+
+    public void ReturnToPool()
+    {
+        // 제한시간이 경과할 것
+        if (_elapsedTime >= _returnDelay)
+        {
+            // 자신이 속한 끝에 대한 참조 필요
+            // 풀 내부적으로 다시 오브젝트를 넣어놓는 기능
+            _elapsedTime = 0;
+            Pool.Return(this);
+        }
+        
+    }
     // 앞으로 전진
     private void MoveForward()
     {
@@ -28,12 +51,15 @@ public class BulletController : MonoBehaviour
     }
 
     // 터렛으로부터 데이터 전달 받기.
-    public void SetData(int damage, float speed,float destroyDelay)
+    public void SetData(int damage, float speed,float returnDelay)
     {
         _damage = damage;
         _speed = speed;
-        
-        // 스폰 기준으로 제한시간 이후 파괴
-        Destroy(gameObject, destroyDelay);
+        _returnDelay = returnDelay;
+    }
+    
+    private void UpdateElapsedTime()
+    {
+        _elapsedTime += Time.deltaTime;
     }
 }
