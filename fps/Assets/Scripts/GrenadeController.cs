@@ -52,7 +52,7 @@ public class GrenadeController : MonoBehaviour
 
             if (damageable != null)
             {
-                damageable.TakeDamage(_damage);
+                damageable.TakeDamage(new DamageInfo());
                 damageable.Knockback(GetKnockbackDirection(col.transform));
             }
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBox : MonoBehaviour, IInteractable, IDamageable
+public class ItemBox : MonoBehaviour, IInteractable
 {
     public GameObject GameObject { get => gameObject; }
     private Outline _outline;

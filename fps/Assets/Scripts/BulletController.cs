@@ -19,7 +19,6 @@ public class BulletController : MonoBehaviour, IPoolable
         if (other.CompareTag("Player"))
         {
             // TODO: 데미지 주기...
-            Debug.Log("플레이어 맞음");
         }
         
         Pool.Return(this);

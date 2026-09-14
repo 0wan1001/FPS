@@ -4,7 +4,7 @@ public interface IDamageable
 {
  public GameObject GameObject { get; }
 
- public void TakeDamage(int damage);
+ public void TakeDamage(DamageInfo damage);
 
  public void Knockback(Vector3 knockback)
  {

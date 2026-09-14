@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour, IDamageable
 {
+    [Header("터렛 설정")]
     [SerializeField] private LayerMask _raycastTargetLayer;
     [SerializeField] private float _rotateSpeed;
     [SerializeField] private float _cooldown;
+    [SerializeField] private int _maxHealth;
+    [SerializeField] private GameObject _dieEffect;
     [SerializeField] private Transform _headTransform;
     [SerializeField] private Transform _muzzlePoint;
+    [SerializeField] private DamageUI _damageUIPrefab;
     
-    [Header("Bullet")]
+    [Header("불릿 설정")]
     [SerializeField] private BulletController _bulletPrefab;
     [SerializeField] private int _bulletDamage;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _returnDelay;
     [SerializeField] private ObjectPool _bulletPool;
     
+    private int _currentHealth;
     private float _currentCooldown;
+    private EnemyUIController _ui;
     private Transform _playerTransform => _detectionTrigger.TargetTransform;
     private DetectionTrigger _detectionTrigger;
     private bool _isPlayerInTrigger { get { return _playerTransform != null; } }
@@ -27,7 +33,7 @@ public class TurretController : MonoBehaviour, IDamageable
     
     // Unity Event Method -----------------------
     private void Awake() => CacheComponents();
-
+    private void Start() => Init();
     private void Update()
     {
         UpdateCurrentCooldown();
@@ -41,6 +47,7 @@ public class TurretController : MonoBehaviour, IDamageable
     private void CacheComponents()
     {
         _detectionTrigger = GetComponentInChildren<DetectionTrigger>();
+        _ui = GetComponent<EnemyUIController>();
     }
 
     private void Fire()
@@ -59,6 +66,11 @@ public class TurretController : MonoBehaviour, IDamageable
         
         SpawnBullet();
         _currentCooldown = 0f;
+    }
+    private void Init()
+    {
+        _currentHealth = _maxHealth;
+        _ui.RefreshHealthUI(_currentHealth, _maxHealth);
     }
 
     private void UpdateCurrentCooldown()
@@ -122,8 +134,26 @@ public class TurretController : MonoBehaviour, IDamageable
         get => gameObject;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(DamageInfo info)
     {
-        Debug.Log("터렛 데미지");
+        _currentHealth -= info.Value;
+        _ui.RefreshHealthUI(_currentHealth, _maxHealth);
+        PrintDamage(info);
+        
+        if (_currentHealth <= 0) Die();
     }
+
+    private void Die()
+    {
+        Instantiate(_dieEffect, transform.position, transform.rotation);
+        Destroy(gameObject);
+    }
+
+    private void PrintDamage(DamageInfo info)
+    {
+        Instantiate(_damageUIPrefab)
+            .SetDamage(info)
+            .Activate();
+    }
+    
 }

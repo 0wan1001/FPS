@@ -39,7 +39,7 @@ public class PlayerUIController : MonoBehaviour
         else
         {
             _stimpackTimer.gameObject.SetActive(true);
-            _stimpackTimer.text = $"스팀팩 {(int)_controller.StimpackTimer}초";
+            _stimpackTimer.text = $"{(int)_controller.StimpackTimer} sec";
         }
     }
 }

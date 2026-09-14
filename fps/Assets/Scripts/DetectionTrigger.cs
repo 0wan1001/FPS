@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class DetectionTrigger : MonoBehaviour
 {
     [SerializeField] private LayerMask _targetLayer;
@@ -15,9 +15,8 @@ public class DetectionTrigger : MonoBehaviour
     private void Awake() => CacheComponents();
     private void Start() => Init();
     private void OnTriggerEnter(Collider other) => DetectTarget(other);
-
-    private void OnTriggerExit(Collider other) => UndetectTarget(other);
-
+    private void OnTriggerExit(Collider other) =>  UndetectTarget(other);
+    
     private void CacheComponents()
     {
         _sphereCollider = GetComponent<SphereCollider>();
@@ -25,13 +24,13 @@ public class DetectionTrigger : MonoBehaviour
 
     private void DetectTarget(Collider collider)
     {
-        if (!_targetLayer.Contains(collider)) return;
+        if(!_targetLayer.Contains(collider)) return;
         TargetTransform = collider.transform;
     }
 
     private void UndetectTarget(Collider collider)
     {
-        if (!_targetLayer.Contains(collider)) return;
+        if(!_targetLayer.Contains(collider)) return;
         TargetTransform = null;
     }
 

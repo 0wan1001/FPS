@@ -133,8 +133,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         _weapon.SetCooldownReduction(_stimpackCooldownBonus);
         _movement.SetJumpBonus(_stimpackJumpBonus);
         if (_stimpackScreen != null) _stimpackScreen.SetActive(true);
-        
-        Debug.Log("스팀팩 발동 20초 지속");
     }
 
     public void UsedStimpack()
@@ -150,8 +148,6 @@ public class PlayerController : MonoBehaviour, IInteractor
             _weapon.SetCooldownReduction(0f);
             _movement.SetJumpBonus(0);
             if (_stimpackScreen != null) _stimpackScreen.SetActive(false);
-            
-            Debug.Log("스팀팩 종료");
         }
     }
 }

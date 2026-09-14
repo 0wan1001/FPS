@@ -58,13 +58,12 @@ public class PlayerWeapon : MonoBehaviour
         if (!_canFire) return;
         
         _currentMagazineCount--;
-        Debug.Log($"남은 총알 {_currentMagazineCount}발");
         _currentCooldown = 0f;
         PlayFlameEffect();
 
-        if (!TryGetDamageable(out IDamageable damageable)) return;
+        if (!TryGetDamageInfo(out DamageInfo damage)) return;
         
-        damageable.TakeDamage(_damage);
+        damage.Target.TakeDamage(damage);
     }
 
     private void PlayFlameEffect()
@@ -80,10 +79,9 @@ public class PlayerWeapon : MonoBehaviour
         effectTransform.forward = hit.normal;
     }
 
-    private bool TryGetDamageable(out IDamageable damageable)
+    private bool TryGetDamageInfo(out DamageInfo info)
     {
-        bool result = false;
-        damageable = null;
+        info = new DamageInfo();
         
         Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
         RaycastHit hit;
@@ -91,10 +89,13 @@ public class PlayerWeapon : MonoBehaviour
         if (Physics.Raycast(ray, out hit, _range, _targetLayer))
         {
             PlayBulletImpactEffect(hit);
-            result = hit.transform.TryGetComponent(out damageable);
+            IDamageable damageable;
+            if (hit.transform.TryGetComponent(out damageable))
+            {
+                info = new DamageInfo(damageable, _damage, hit.point);
+            }
         }
-
-        return result;
+        return info.IsValid;
     }
 
     private void CacheComponents()
@@ -144,6 +145,5 @@ public class PlayerWeapon : MonoBehaviour
         if (!_isPressedReload) return;
 
         _currentMagazineCount = _maxMagazineCount;
-        Debug.Log($"장전 완료 {_currentMagazineCount}발");
     }
 }
