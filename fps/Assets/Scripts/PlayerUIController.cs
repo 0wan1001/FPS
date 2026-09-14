@@ -16,7 +16,7 @@ public class PlayerUIController : MonoBehaviour
     private void Update()
     {
         RefreshMagazineUI();
-        RefreshStimpackTimerUi();
+        RefreshStimpackTimerUI();
     }
 
     private void CacheComponents()
@@ -30,7 +30,7 @@ public class PlayerUIController : MonoBehaviour
         _magazine.text = $"{_weapon.CurrentMagazine} / {_weapon.MaxMagazine}";
     }
 
-    public void RefreshStimpackTimerUi()
+    public void RefreshStimpackTimerUI()
     {
         if (!_controller.IsStimpackActive)
         {

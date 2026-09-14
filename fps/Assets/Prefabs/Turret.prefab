@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 7169519776509937864}
   - component: {fileID: 7282737231368650759}
   - component: {fileID: 6456950948783038093}
+  - component: {fileID: 9138109339590015016}
   m_Layer: 10
   m_Name: Turret
   m_TagString: Untagged
@@ -104,7 +105,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
@@ -120,6 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd1440834757be46ae68be9def16dde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _raycastTargetLayer:
+    serializedVersion: 2
+    m_Bits: 128
   _rotateSpeed: 70
   _cooldown: 0.3
   _headTransform: {fileID: 8996947033500506215}
@@ -129,6 +133,21 @@ MonoBehaviour:
   _bulletSpeed: 4
   _returnDelay: 3
   _bulletPool: {fileID: 0}
+--- !u!114 &9138109339590015016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481911362027233837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dca7af027ef7474d99e6aebdc590fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1001 &6944397482674526436
 PrefabInstance:
   m_ObjectHideFlags: 0

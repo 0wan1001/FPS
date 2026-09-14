@@ -6257,6 +6257,14 @@ PrefabInstance:
       propertyPath: _returnDelay
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6456950948783038093, guid: 8e0363a6f12e40f47a7fcc9ec81867cc, type: 3}
+      propertyPath: _raycastTargetLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 7282737231368650759, guid: 8e0363a6f12e40f47a7fcc9ec81867cc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16288,6 +16296,14 @@ PrefabInstance:
       propertyPath: _returnDelay
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6456950948783038093, guid: 8e0363a6f12e40f47a7fcc9ec81867cc, type: 3}
+      propertyPath: _raycastTargetLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 7282737231368650759, guid: 8e0363a6f12e40f47a7fcc9ec81867cc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16463,6 +16479,10 @@ PrefabInstance:
       propertyPath: _bulletPool
       value: 
       objectReference: {fileID: 300484275}
+    - target: {fileID: 7282737231368650759, guid: 8e0363a6f12e40f47a7fcc9ec81867cc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17210,12 +17230,20 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2515305123559650175, guid: 5ec5b67cff477d947ae2d0e2511ba20f, type: 3}
+      propertyPath: _targetLayer.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515305123559650175, guid: 5ec5b67cff477d947ae2d0e2511ba20f, type: 3}
       propertyPath: _maxGrenadeThrowForce
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2515305123559650175, guid: 5ec5b67cff477d947ae2d0e2511ba20f, type: 3}
       propertyPath: _currentGrenadeThrowForce
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2638775959410104833, guid: 5ec5b67cff477d947ae2d0e2511ba20f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5994030461077375010, guid: 5ec5b67cff477d947ae2d0e2511ba20f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17573,6 +17601,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e44675d56fc733479bb1b6fd72aae7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   _reloadKey: 114
   _fireKey: 323
   _grenadeKey: 51

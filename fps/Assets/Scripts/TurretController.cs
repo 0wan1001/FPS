@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour, IDamageable
 {
+    [SerializeField] private LayerMask _raycastTargetLayer;
     [SerializeField] private float _rotateSpeed;
     [SerializeField] private float _cooldown;
     [SerializeField] private Transform _headTransform;
@@ -18,30 +19,14 @@ public class TurretController : MonoBehaviour, IDamageable
     [SerializeField] private ObjectPool _bulletPool;
     
     private float _currentCooldown;
-    private Transform _playerTransform;
+    private Transform _playerTransform => _detectionTrigger.TargetTransform;
+    private DetectionTrigger _detectionTrigger;
     private bool _isPlayerInTrigger { get { return _playerTransform != null; } }
     private bool _isPlayerInSight = false;
     private bool _isReadyToFire { get { return _currentCooldown >= _cooldown; } }
-    private SphereCollider _sphereCollider;
     
     // Unity Event Method -----------------------
     private void Awake() => CacheComponents();
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            _playerTransform = other.transform;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            _playerTransform = null;
-        }
-    }
 
     private void Update()
     {
@@ -55,7 +40,7 @@ public class TurretController : MonoBehaviour, IDamageable
     
     private void CacheComponents()
     {
-        _sphereCollider = GetComponent<SphereCollider>();
+        _detectionTrigger = GetComponentInChildren<DetectionTrigger>();
     }
 
     private void Fire()
@@ -112,29 +97,23 @@ public class TurretController : MonoBehaviour, IDamageable
 
         Vector3 from = new Vector3(
             transform.position.x,
-            transform.position.y + _muzzlePoint.position.y / 2,
+            transform.position.y + _muzzlePoint.position.y,
             transform.position.z
             );
         
         Vector3 to = new Vector3(
             _playerTransform.position.x,
-            _playerTransform.position.y + _muzzlePoint.position.y / 2,
+            _playerTransform.position.y + _muzzlePoint.position.y,
             _playerTransform.position.z
             );
         
         Ray ray = new Ray(from, (to - from).normalized);
         RaycastHit hit;
-
-        // 대안 :  발사 높이와 감지 높이를 다르게 해서 우회
-        // TODO: LayerMask 배운 후 리팩토링
         
-        if (Physics.Raycast(ray, out hit, _sphereCollider.radius))
+        if (Physics.Raycast(ray, out hit, _detectionTrigger.Range, _raycastTargetLayer))
         {
-            // 레이어마스크 쓰고싶다
-            if (hit.transform.CompareTag("Player"))
-            {
-                _isPlayerInSight = true;
-            }
+            if (hit.transform != _playerTransform) return;
+            _isPlayerInSight = true;
         }
     }
 

@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    private Transform _cameraTransform;
+
     [Header("무기 설정")]
+    [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private KeyCode _reloadKey = KeyCode.R;
     [SerializeField] private KeyCode _fireKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode _grenadeKey = KeyCode.Alpha3;
@@ -21,6 +22,7 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private float _maxGrenadeThrowForce;
     [SerializeField] private float _currentGrenadeThrowForce;
     
+    private Transform _cameraTransform;
     private float _currentCooldown;
     private int _currentMagazineCount;
     private float _cooldownReduction;
@@ -86,7 +88,7 @@ public class PlayerWeapon : MonoBehaviour
         Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
         RaycastHit hit;
         
-        if (Physics.Raycast(ray, out hit, _range))
+        if (Physics.Raycast(ray, out hit, _range, _targetLayer))
         {
             PlayBulletImpactEffect(hit);
             result = hit.transform.TryGetComponent(out damageable);
