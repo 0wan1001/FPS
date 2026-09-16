@@ -8,6 +8,7 @@ public class PlayerUIController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _magazine;
     [SerializeField] private TextMeshProUGUI _stimpackTimer;
+    [SerializeField] private TextMeshProUGUI _reloding;
     private PlayerWeapon _weapon;
     private PlayerController _controller;
     
@@ -27,7 +28,19 @@ public class PlayerUIController : MonoBehaviour
     
     public void RefreshMagazineUI()
     {
-        _magazine.text = $"{_weapon.CurrentMagazine} / {_weapon.MaxMagazine}";
+        if (_weapon._isReloading)
+        {
+            _magazine.gameObject.SetActive(false);
+            _reloding.gameObject.SetActive(true);
+            _reloding.text = "Reload..";
+            
+        }
+        else
+        {
+            _magazine.gameObject.SetActive(true);
+            _reloding.gameObject.SetActive(false);
+            _magazine.text = $"{_weapon.CurrentMagazine} / {_weapon.MaxMagazine}";
+        }
     }
 
     public void RefreshStimpackTimerUI()

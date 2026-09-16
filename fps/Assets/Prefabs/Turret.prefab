@@ -282,16 +282,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4224
   _rotateSpeed: 100
-  _cooldown: 1
+  _cooldown: 0.8
   _maxHealth: 200
   _dieEffect: {fileID: 8982769046642479945, guid: abefa6b385520464fa6aac844fbab795, type: 3}
   _headTransform: {fileID: 8996947033500506215}
   _muzzlePoint: {fileID: 5801213488747336069}
   _damageUIPrefab: {fileID: 1735150330388288426, guid: d59455af7f6834f478a836d34f9b5cda, type: 3}
-  _bulletPrefab: {fileID: 4283133364075005443, guid: a4a9c4e6fb9f04644aa8018ce0b42c10, type: 3}
+  _bulletPrefab: {fileID: 5890144360386516501, guid: a4a9c4e6fb9f04644aa8018ce0b42c10, type: 3}
   _bulletDamage: 10
   _bulletSpeed: 5
-  _returnDelay: 3
+  _returnDelay: 5
   _bulletPool: {fileID: 0}
 --- !u!114 &1859041422189661097
 MonoBehaviour:

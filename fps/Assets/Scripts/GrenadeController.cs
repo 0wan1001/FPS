@@ -52,7 +52,13 @@ public class GrenadeController : MonoBehaviour
 
             if (damageable != null)
             {
-                damageable.TakeDamage(new DamageInfo());
+                DamageInfo damageInfo = new DamageInfo(
+                    damageable,
+                    _damage,
+                    col.ClosestPoint(transform.position)
+                );
+
+                damageable.TakeDamage(damageInfo);
                 damageable.Knockback(GetKnockbackDirection(col.transform));
             }
         }

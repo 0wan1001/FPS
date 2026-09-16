@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _explosionDelay: 2
   _range: 4
-  _damage: 10
+  _damage: 100
   _knockbackForce: 2
   _effect: {fileID: 2235009082837415841}
   _body: {fileID: 8265827723010724028}

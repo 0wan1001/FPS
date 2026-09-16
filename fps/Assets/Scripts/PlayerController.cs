@@ -50,9 +50,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         DetectInteractable();
         TryInteract();
         UsedStimpack();
-        
-        if(Input.GetKeyDown(KeyCode.P)) GameManager.Instance.Pause();
-        else if (Input.GetKeyDown(KeyCode.O)) GameManager.Instance.Run();
     }
 
     private void LateUpdate()

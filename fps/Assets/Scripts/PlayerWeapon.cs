@@ -16,20 +16,22 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private int _damage;
     [SerializeField] private float _cooldown;
     [SerializeField] private int _maxMagazineCount;
+    [SerializeField] private float _reloadDelay;
     [Header("수류탄 설정")]
     [SerializeField] private GrenadeController _grenadePrefab;
     [SerializeField] private Transform _generadePoint;
     [SerializeField] private float _maxGrenadeThrowForce;
     [SerializeField] private float _currentGrenadeThrowForce;
     
+    
     private Transform _cameraTransform;
     private float _currentCooldown;
     private int _currentMagazineCount;
     private float _cooldownReduction;
+    public bool _isReloading;
     
     public int CurrentMagazine => _currentMagazineCount;
     public int MaxMagazine => _maxMagazineCount;
-    
     public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
@@ -39,7 +41,7 @@ public class PlayerWeapon : MonoBehaviour
     private bool _hasBullet => _currentMagazineCount > 0;
     private float _buffCooldown => Mathf.Max(0.01f, _cooldown - _cooldownReduction);
     private bool _isReadyFire => _currentCooldown >= _buffCooldown;
-    private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet;
+    private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet && !_isReloading;
     private bool _canThrowGrenade => _isUpGrenadeKey && _hasEnoughForce;
     
     // 한 탄알집에 30발 들어갈 수 있음
@@ -143,7 +145,14 @@ public class PlayerWeapon : MonoBehaviour
     public void Reload()
     {
         if (!_isPressedReload) return;
+        StartCoroutine(ReloadRoutine());
+    }
 
+    public IEnumerator ReloadRoutine()
+    {
+        _isReloading = true;
+        yield return new WaitForSeconds(_reloadDelay);
         _currentMagazineCount = _maxMagazineCount;
+        _isReloading = false;
     }
 }

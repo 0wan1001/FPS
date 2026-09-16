@@ -9,6 +9,12 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Awake() => SetSingleton();
     private void Start() => Run();
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P)) Instance.Pause();
+        else if (Input.GetKeyDown(KeyCode.O)) Instance.Run();
+    }
     
     public void Run()
     {
