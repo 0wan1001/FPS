@@ -58,7 +58,7 @@ RectTransform:
   m_GameObject: {fileID: 2678507092198791155}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.7, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 343424692539199013}
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -335,7 +335,7 @@ RectTransform:
   m_GameObject: {fileID: 6931816141505450292}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.7, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 343424692539199013}
@@ -343,7 +343,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.060000025, y: -0.060000002}
+  m_SizeDelta: {x: -0.049999997, y: -0.049999997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &93014635332754621
 CanvasRenderer:
@@ -582,8 +582,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.15
-  m_fontSizeBase: 0.15
+  m_fontSize: 0.1
+  m_fontSizeBase: 0.1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

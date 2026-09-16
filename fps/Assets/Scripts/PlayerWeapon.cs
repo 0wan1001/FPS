@@ -22,24 +22,29 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private Transform _generadePoint;
     [SerializeField] private float _maxGrenadeThrowForce;
     [SerializeField] private float _currentGrenadeThrowForce;
+    [SerializeField] private int _maxGrenadeCount;
     
     
     private Transform _cameraTransform;
     private float _currentCooldown;
     private int _currentMagazineCount;
+    private int _currentGrenadeCount;
     private float _cooldownReduction;
 
     public bool _isReloading { get; private set; }
     
     public int CurrentMagazine => _currentMagazineCount;
     public int MaxMagazine => _maxMagazineCount;
+    public int CurrentGrenadeCount => _currentGrenadeCount;
+    public int MaxGrenade => _maxGrenadeCount;
     public void SetCooldownReduction(float reduction) => _cooldownReduction = reduction;
     private bool _isPressedFire => Input.GetKey(_fireKey);
     private bool _isPressedReload => Input.GetKeyDown(_reloadKey);
     private bool _isPressGrenadeKey => Input.GetKey(_grenadeKey);
     private bool _isUpGrenadeKey => Input.GetKeyUp(_grenadeKey);
-    private bool _hasEnoughForce => _currentMagazineCount >= _maxMagazineCount * 0.3;
+    private bool _hasEnoughForce => _currentGrenadeThrowForce >= _maxGrenadeThrowForce * 0.3f;
     private bool _hasBullet => _currentMagazineCount > 0;
+    private bool _hasGrenade => _currentGrenadeCount > 0;
     private float _buffCooldown => Mathf.Max(0.01f, _cooldown - _cooldownReduction);
     private bool _isReadyFire => _currentCooldown >= _buffCooldown;
     private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet && !_isReloading;
@@ -105,6 +110,7 @@ public class PlayerWeapon : MonoBehaviour
     {
         _currentCooldown = 0f;
         _currentMagazineCount =_maxMagazineCount;
+        _currentGrenadeCount = _maxGrenadeCount;
     }
 
     private void UpdateCooldown()
@@ -115,7 +121,7 @@ public class PlayerWeapon : MonoBehaviour
     }
     public void GrenadeThrowCharge()
     {
-        if (!_isPressGrenadeKey) return;
+        if (!_hasGrenade || !_isPressGrenadeKey) return;
         
         _currentGrenadeThrowForce += Time.deltaTime * _maxGrenadeThrowForce;
         _currentGrenadeThrowForce = Mathf.Clamp(_currentGrenadeThrowForce, 0f, _maxGrenadeThrowForce);
@@ -125,9 +131,9 @@ public class PlayerWeapon : MonoBehaviour
     {
         if (!_isUpGrenadeKey) return;
         
-        if (!_hasEnoughForce)
+        if (!_hasGrenade || !_hasEnoughForce)
         {
-            _currentGrenadeThrowForce = 5f;
+            _currentGrenadeThrowForce = 0f;
             return;
         }
         
@@ -135,12 +141,13 @@ public class PlayerWeapon : MonoBehaviour
         
         Instantiate(_grenadePrefab, _generadePoint.position, _generadePoint.rotation)
             .Throw(force);
-        _currentGrenadeThrowForce = 5f;
+        _currentGrenadeCount--;
+        _currentGrenadeThrowForce = 0f;
     }
     
     public void Reload()
     {
-        if (!_isPressedReload) return;
+        if (!_isPressedReload || _isReloading || _currentMagazineCount >= _maxMagazineCount) return;
         StartCoroutine(ReloadRoutine());
     }
 

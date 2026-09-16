@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour, IInteractor, IDamageable
 {
@@ -40,7 +41,14 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
     public GameObject GameObject { get => gameObject; }
 
     // -----------------------------------------------
-    private void Awake() => CacheComponents();
+    private void Awake()
+    {
+        CacheComponents();
+        if (_gameManager == null)
+        {
+            _gameManager = FindObjectOfType<GameManager>();
+        }
+    }
     private void FixedUpdate() => _movement.Move();
     private void Start() => Init();
 
@@ -175,7 +183,6 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
         if (_currentHealth <= 0)
         {
             _currentHealth = 0;
-            gameObject.SetActive(false);
         }
         _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);   
     }

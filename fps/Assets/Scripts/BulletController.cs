@@ -18,10 +18,11 @@ public class BulletController : MonoBehaviour, IPoolable
     {
         if (other.CompareTag("Player"))
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (player != null)
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                Debug.Log($"{other.name} is hit!");
+                DamageInfo info = new DamageInfo(damageable, _damage, transform.position);
+                damageable.TakeDamage(info);
             }
         }
         Pool.Return(this);

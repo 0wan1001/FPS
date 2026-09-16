@@ -7,10 +7,12 @@ using TMPro;
 public class PlayerUIController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _magazine;
+    [SerializeField] private TextMeshProUGUI _grenade;
     [SerializeField] private TextMeshProUGUI _stimpackTimer;
     [SerializeField] private TextMeshProUGUI _reloding;
     [SerializeField] private TextMeshProUGUI _hpText;
     [SerializeField] private Image _hpGauge;
+    [SerializeField] private Image _grenadeIcon;
     
     private PlayerWeapon _weapon;
     private PlayerController _controller;
@@ -20,6 +22,7 @@ public class PlayerUIController : MonoBehaviour
     private void Update()
     {
         RefreshMagazineUI();
+        RefreshGrenadeUI();
         RefreshStimpackTimerUI();
     }
 
@@ -63,6 +66,16 @@ public class PlayerUIController : MonoBehaviour
     {
         _hpGauge.fillAmount = health / (float)_maxHealth;
         _hpText.text = $"{health}";
+    }
+
+    public void RefreshGrenadeUI()
+    {
+        if (!_grenade.gameObject.activeSelf)
+        {
+            _grenadeIcon.gameObject.SetActive(true);
+            _grenade.gameObject.SetActive(true);
+        }
+        _grenade.text = $"{_weapon.CurrentGrenadeCount}";
     }
     
 }
