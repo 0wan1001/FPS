@@ -6,25 +6,40 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour, IInteractor, IDamageable
 {
-    [Header("플레이어")]
-    [SerializeField] private GameManager _gameManager;
+    [Header("플레이어")] [SerializeField] private GameManager _gameManager;
     [SerializeField] private Transform _cameraPivot;
+    [SerializeField] private GameUIManager _gameUIManager;
     [SerializeField] private KeyCode _interactKey = KeyCode.E;
     [SerializeField] private float _detectionRange;
     [SerializeField] private int _maxHealth;
-    
-    [Header("스팀팩")]
-    [SerializeField] private float _stimpackDuration;
+
+    [Header("스팀팩")] [SerializeField] private float _stimpackDuration;
     [SerializeField] private float _stimpackSpeedBonus;
     [SerializeField] private float _stimpackCooldownBonus;
     [SerializeField] private int _stimpackJumpBonus;
     [SerializeField] private int _stimpackHealBouns;
     [SerializeField] private GameObject _stimpackScreen;
 
+    [Header("조준(ADS) 설정")] [SerializeField]
+    private Vector3 _hipFireOffset = new Vector3(0.43f, -0.4f, 0.6f);
+
+    [SerializeField] private Vector3 _aimOffset = new Vector3(0f, -0.01f, -0.02f);
+    [SerializeField] private float _aimSpeed = 30f;
+
+    [Header("카메라 FOV 줌 설정")] [SerializeField]
+    private float _defaultFOV = 70f;
+
+    [SerializeField] private float _aimFOV = 50f;
+    [SerializeField] private float _fovSpeed = 15f;
+
+    private Camera _mainCamera;
+
+    private Vector3 _currentOffset;
+
     private int _currentHealth;
     private float _stimpackTimer;
     private bool _isStimpackActive;
-    
+
     public bool IsStimpackActive => _isStimpackActive;
     public float StimpackTimer => _stimpackTimer;
 
@@ -37,8 +52,11 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
     private bool _hasDetectInteractable => _targetInteractable != null;
     private bool _isPressedInteractinKey => Input.GetKeyDown(_interactKey);
     private bool _canInteraction => _hasDetectInteractable && _isPressedInteractinKey;
-    
-    public GameObject GameObject { get => gameObject; }
+
+    public GameObject GameObject
+    {
+        get => gameObject;
+    }
 
     // -----------------------------------------------
     private void Awake()
@@ -49,6 +67,7 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
             _gameManager = FindObjectOfType<GameManager>();
         }
     }
+
     private void FixedUpdate() => _movement.Move();
     private void Start() => Init();
 
@@ -61,7 +80,7 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
         _weapon.Reload();
         _weapon.GrenadeThrowCharge();
         _weapon.GrenadeThrowRelease();
-        
+
         DetectInteractable();
         TryInteract();
         UsedStimpack();
@@ -70,41 +89,38 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
     private void LateUpdate()
     {
         SetWeaponTransform();
-        SetCameraTransform();
+        //SetCameraTransform();
     }
     // -----------------------------------------------
-    
+
     private void CacheComponents()
     {
         _movement = GetComponent<PlayerMovement>();
         _weapon = GetComponentInChildren<PlayerWeapon>();
         _ui = GetComponent<PlayerUIController>();
-        _cameraTransform = Camera.main.transform;
+        _mainCamera = Camera.main;
+        _cameraTransform = _mainCamera.transform;
     }
+
     private void SetWeaponTransform()
     {
-        _weapon.transform.SetPositionAndRotation(
-            _cameraPivot.position, 
-            _cameraPivot.rotation
-        );
-    }
-    
-    private void SetCameraTransform()
-    {
-        _cameraTransform.SetPositionAndRotation(
-            _cameraPivot.position,
-            _cameraPivot.rotation
-        );
-        
-        // _cameraTransform.position = _cameraPivot.position;
-        // _cameraTransform.rotation = _cameraPivot.rotation;
+        bool isAiming = Input.GetMouseButton(1);
+
+        Vector3 targetOffset = isAiming ? _aimOffset : _hipFireOffset;
+        _currentOffset = Vector3.Lerp(_currentOffset, targetOffset, Time.deltaTime * _aimSpeed);
+
+        Vector3 targetPosition = _cameraPivot.position + (_cameraPivot.rotation * _currentOffset);
+        _weapon.transform.SetPositionAndRotation(targetPosition, _cameraPivot.rotation);
+
+        float targetFOV = isAiming ? _aimFOV : _defaultFOV;
+        _mainCamera.fieldOfView = Mathf.Lerp(_mainCamera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }
 
     public void DetectInteractable()
     {
         Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
         RaycastHit hit;
-        
+
         if (!Physics.Raycast(ray, out hit, _detectionRange))
         {
             if (_hasDetectInteractable)
@@ -112,9 +128,10 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
                 _targetInteractable.Untargeting();
                 _targetInteractable = null;
             }
-            
+
             return;
         }
+
         if (_hasDetectInteractable)
         {
             if (hit.collider.gameObject == _targetInteractable.GameObject)
@@ -122,17 +139,17 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
                 return; // 같은 Interactable을 계속 주시하고 있는 경우
             }
         }
-        
+
         _targetInteractable?.Untargeting();
         _targetInteractable = hit.collider.GetComponent<IInteractable>();
-        
+
         _targetInteractable?.Targeting();
     }
 
     public void TryInteract()
     {
         if (!_canInteraction) return;
-        
+
         _targetInteractable.Interact(this);
         _targetInteractable = null;
     }
@@ -141,17 +158,18 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
     {
         _currentHealth = _maxHealth;
         _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
+        _currentOffset = _hipFireOffset;
     }
-    
+
     public void UseStimpack()
     {
         _stimpackTimer = _stimpackDuration;
         _isStimpackActive = true;
-        
+
         _currentHealth += _stimpackHealBouns;
         if (_currentHealth > _maxHealth) _currentHealth = _maxHealth;
         _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
-        
+
         _movement.SetSpeedBonus(_stimpackSpeedBonus);
         _weapon.SetCooldownReduction(_stimpackCooldownBonus);
         _movement.SetJumpBonus(_stimpackJumpBonus);
@@ -160,7 +178,7 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
 
     public void UsedStimpack()
     {
-        
+
         if (!_isStimpackActive) return;
         _stimpackTimer -= Time.deltaTime;
 
@@ -176,14 +194,29 @@ public class PlayerController : MonoBehaviour, IInteractor, IDamageable
 
     public void TakeDamage(DamageInfo info)
     {
-        if (_currentHealth > 0)
-        {
-            _currentHealth -= info.Value;
-        }
+        if (_currentHealth <= 0) return;
+
+        _currentHealth -= info.Value;
+
         if (_currentHealth <= 0)
         {
             _currentHealth = 0;
+            _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
+            
+            if (_gameManager != null)
+            {
+                _gameManager.Pause();
+            }
+            if (_gameUIManager == null)
+            {
+                _gameUIManager = FindObjectOfType<GameUIManager>();
+            }
+            if (_gameUIManager != null)
+            {
+                _gameUIManager.OpenMenu();
+            }
+            return;
         }
-        _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);   
+        _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
     }
 }

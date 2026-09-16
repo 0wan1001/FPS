@@ -48,7 +48,6 @@ public class PlayerWeapon : MonoBehaviour
     private float _buffCooldown => Mathf.Max(0.01f, _cooldown - _cooldownReduction);
     private bool _isReadyFire => _currentCooldown >= _buffCooldown;
     private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet && !_isReloading;
-    private bool _canThrowGrenade => _isUpGrenadeKey && _hasEnoughForce;
     
     // ------------------------------------------
     private void Awake() => CacheComponents();

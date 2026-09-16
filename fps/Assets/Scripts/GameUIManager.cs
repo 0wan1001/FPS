@@ -12,10 +12,17 @@ public class GameUIManager : MonoBehaviour
     
     private bool _isPressedMenu => Input.GetKeyDown(_menuKey);
 
+    private void Awake() => Init();
 
     private void Update()
     {
         if (_isPressedMenu) Activate(_menu);
+    }
+
+    public void OpenMenu()
+    {
+        if (_menu == null) return;
+        Activate(_menu);
     }
 
     private void Activate(UIController ui)
@@ -32,6 +39,9 @@ public class GameUIManager : MonoBehaviour
 
     private void Init()
     {
-        _menu.Init(this);
+        if (_menu != null)
+        {
+            _menu.Init(this);
+        }
     }
 }
