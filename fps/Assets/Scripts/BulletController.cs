@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour, IPoolable
@@ -12,15 +13,17 @@ public class BulletController : MonoBehaviour, IPoolable
     public ObjectPool Pool { get; set; }
     public Transform tr { get => transform; }
     
-
     // 어딘가에 부딪히면
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // TODO: 데미지 주기...
+            PlayerController player = other.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                Debug.Log($"{other.name} is hit!");
+            }
         }
-        
         Pool.Return(this);
     }
 
@@ -61,4 +64,5 @@ public class BulletController : MonoBehaviour, IPoolable
     {
         _elapsedTime += Time.deltaTime;
     }
+    
 }

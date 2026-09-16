@@ -2,19 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : SingletonBehaviour<GameManager>
+public class GameManager : MonoBehaviour
 {
     public bool IsGameRunning { get; private set; }
-    public static GameManager Instance;
-
-    private void Awake() => SetSingleton();
+    
     private void Start() => Run();
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.P)) Instance.Pause();
-        else if (Input.GetKeyDown(KeyCode.O)) Instance.Run();
-    }
     
     public void Run()
     {

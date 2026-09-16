@@ -70,7 +70,7 @@ public class TurretController : MonoBehaviour, IDamageable
     private void Init()
     {
         _currentHealth = _maxHealth;
-        _ui.RefreshHealthUI(_currentHealth, _maxHealth);
+        _ui.RefreshEnemyHealthUI(_currentHealth, _maxHealth);
     }
 
     private void UpdateCurrentCooldown()
@@ -137,7 +137,7 @@ public class TurretController : MonoBehaviour, IDamageable
     public void TakeDamage(DamageInfo info)
     {
         _currentHealth -= info.Value;
-        _ui.RefreshHealthUI(_currentHealth, _maxHealth);
+        _ui.RefreshEnemyHealthUI(_currentHealth, _maxHealth);
         PrintDamage(info);
         
         if (_currentHealth <= 0) Die();

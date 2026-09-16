@@ -28,7 +28,8 @@ public class PlayerWeapon : MonoBehaviour
     private float _currentCooldown;
     private int _currentMagazineCount;
     private float _cooldownReduction;
-    public bool _isReloading;
+
+    public bool _isReloading { get; private set; }
     
     public int CurrentMagazine => _currentMagazineCount;
     public int MaxMagazine => _maxMagazineCount;
@@ -43,11 +44,6 @@ public class PlayerWeapon : MonoBehaviour
     private bool _isReadyFire => _currentCooldown >= _buffCooldown;
     private bool _canFire => _isPressedFire && _isReadyFire && _hasBullet && !_isReloading;
     private bool _canThrowGrenade => _isUpGrenadeKey && _hasEnoughForce;
-    
-    // 한 탄알집에 30발 들어갈 수 있음
-    // 30발 발사시 총 안쏴짐
-    // 리로드 버튼 (R) 로 다시 30발 채움
-    // 리로드 할 수 있는 탄환 무제한
     
     // ------------------------------------------
     private void Awake() => CacheComponents();

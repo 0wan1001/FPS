@@ -13,7 +13,7 @@ public class EnemyUIController : MonoBehaviour
     private Transform _cameraTransform;
     private void Awake() => CacheComponents();
     private void LateUpdate() => SetRotation();
-    public void RefreshHealthUI(int health, int maxHealth)
+    public void RefreshEnemyHealthUI(int health, int maxHealth)
     {
         _gauge.fillAmount = health / (float)maxHealth;
         _text.text = $"{health}/{maxHealth}";

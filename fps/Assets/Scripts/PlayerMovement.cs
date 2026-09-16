@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("플레이어 설정")]
+    [Header("이동")]
     [SerializeField] private Transform _cameraPivot;
     [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
     [SerializeField] private float _moveSpeed;

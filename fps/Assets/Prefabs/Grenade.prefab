@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5114555981589915927}
   - component: {fileID: 8077908845038856722}
   - component: {fileID: 7790675156577659969}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Grenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _explosionDelay: 2
   _range: 4
-  _damage: 100
+  _damage: 40
   _knockbackForce: 2
   _effect: {fileID: 2235009082837415841}
   _body: {fileID: 8265827723010724028}
@@ -94,7 +94,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -112,13 +112,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 270203592615316182}
     m_Modifications:
+    - target: {fileID: 100000, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 8f611da60097c85438a2947021f045cf, type: 3}
       propertyPath: m_Name
       value: WFXMR_Explosion Simple
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 8f611da60097c85438a2947021f045cf, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 8f611da60097c85438a2947021f045cf, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 8f611da60097c85438a2947021f045cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -208,9 +232,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 270203592615316182}
     m_Modifications:
+    - target: {fileID: 100000, guid: fdd9b790eff3ea74d9c1ccf2c0db76bb, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: fdd9b790eff3ea74d9c1ccf2c0db76bb, type: 3}
       propertyPath: m_Name
       value: Smoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: fdd9b790eff3ea74d9c1ccf2c0db76bb, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: fdd9b790eff3ea74d9c1ccf2c0db76bb, type: 3}
       propertyPath: m_LocalPosition.x

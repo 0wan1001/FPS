@@ -9,6 +9,9 @@ public class PlayerUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _magazine;
     [SerializeField] private TextMeshProUGUI _stimpackTimer;
     [SerializeField] private TextMeshProUGUI _reloding;
+    [SerializeField] private TextMeshProUGUI _hpText;
+    [SerializeField] private Image _hpGauge;
+    
     private PlayerWeapon _weapon;
     private PlayerController _controller;
     
@@ -55,4 +58,11 @@ public class PlayerUIController : MonoBehaviour
             _stimpackTimer.text = $"{(int)_controller.StimpackTimer} sec";
         }
     }
+
+    public void RefreshPlayerHealthUI(int health, int _maxHealth)
+    {
+        _hpGauge.fillAmount = health / (float)_maxHealth;
+        _hpText.text = $"{health}";
+    }
+    
 }

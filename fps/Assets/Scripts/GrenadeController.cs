@@ -57,7 +57,6 @@ public class GrenadeController : MonoBehaviour
                     _damage,
                     col.ClosestPoint(transform.position)
                 );
-
                 damageable.TakeDamage(damageInfo);
                 damageable.Knockback(GetKnockbackDirection(col.transform));
             }

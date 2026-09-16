@@ -1,28 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IInteractor
+public class PlayerController : MonoBehaviour, IInteractor, IDamageable
 {
-    [Header("플레이어 설정")]
+    [Header("플레이어")]
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private Transform _cameraPivot;
     [SerializeField] private KeyCode _interactKey = KeyCode.E;
     [SerializeField] private float _detectionRange;
+    [SerializeField] private int _maxHealth;
     
-    
-    [Header("스팀팩 설정")]
+    [Header("스팀팩")]
     [SerializeField] private float _stimpackDuration;
     [SerializeField] private float _stimpackSpeedBonus;
     [SerializeField] private float _stimpackCooldownBonus;
     [SerializeField] private int _stimpackJumpBonus;
+    [SerializeField] private int _stimpackHealBouns;
     [SerializeField] private GameObject _stimpackScreen;
 
+    private int _currentHealth;
     private float _stimpackTimer;
     private bool _isStimpackActive;
     
     public bool IsStimpackActive => _isStimpackActive;
     public float StimpackTimer => _stimpackTimer;
 
+    private PlayerUIController _ui;
     private PlayerWeapon _weapon;
     private PlayerMovement _movement;
     private Transform _cameraTransform;
@@ -37,9 +42,11 @@ public class PlayerController : MonoBehaviour, IInteractor
     // -----------------------------------------------
     private void Awake() => CacheComponents();
     private void FixedUpdate() => _movement.Move();
+    private void Start() => Init();
 
     private void Update()
     {
+        if (!_gameManager.IsGameRunning) return;
         _movement.Rotate();
         _movement.Jump();
         _weapon.Fire();
@@ -63,6 +70,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     {
         _movement = GetComponent<PlayerMovement>();
         _weapon = GetComponentInChildren<PlayerWeapon>();
+        _ui = GetComponent<PlayerUIController>();
         _cameraTransform = Camera.main.transform;
     }
     private void SetWeaponTransform()
@@ -121,10 +129,20 @@ public class PlayerController : MonoBehaviour, IInteractor
         _targetInteractable = null;
     }
 
+    private void Init()
+    {
+        _currentHealth = _maxHealth;
+        _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
+    }
+    
     public void UseStimpack()
     {
         _stimpackTimer = _stimpackDuration;
         _isStimpackActive = true;
+        
+        _currentHealth += _stimpackHealBouns;
+        if (_currentHealth > _maxHealth) _currentHealth = _maxHealth;
+        _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);
         
         _movement.SetSpeedBonus(_stimpackSpeedBonus);
         _weapon.SetCooldownReduction(_stimpackCooldownBonus);
@@ -134,8 +152,8 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     public void UsedStimpack()
     {
-        if (!_isStimpackActive) return;
         
+        if (!_isStimpackActive) return;
         _stimpackTimer -= Time.deltaTime;
 
         if (_stimpackTimer <= 0f)
@@ -146,5 +164,19 @@ public class PlayerController : MonoBehaviour, IInteractor
             _movement.SetJumpBonus(0);
             if (_stimpackScreen != null) _stimpackScreen.SetActive(false);
         }
+    }
+
+    public void TakeDamage(DamageInfo info)
+    {
+        if (_currentHealth > 0)
+        {
+            _currentHealth -= info.Value;
+        }
+        if (_currentHealth <= 0)
+        {
+            _currentHealth = 0;
+            gameObject.SetActive(false);
+        }
+        _ui.RefreshPlayerHealthUI(_currentHealth, _maxHealth);   
     }
 }

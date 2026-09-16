@@ -18,7 +18,7 @@ public class DamageUI : MonoBehaviour
 
     public DamageUI SetDamage(DamageInfo info)
     {
-        _Text.text = $"{info.Value}";
+        _Text.text = $"-{info.Value}";
         transform.position = info.HitPoint;
         return this;
     }
